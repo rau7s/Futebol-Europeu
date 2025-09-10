@@ -44,3 +44,15 @@ with sqlite3.connect(INPUT_DB) as conn: # conn é a conexão com o banco, vamos 
     preview_df = pd.read_sql_query(preview_query, conn)
     print(f"Só uma previa do que é a tabela {chosen_table}, primeiras 5 linhas: ")
     print(preview_df.head().to_string(index=False)) 
+
+    # 3. ver as colunas da tabela -- p saber os campos q existem
+    pragma_query = f'PRAGMA table_info("{chosen_table}")'
+    colunas_df = pd.read_sql_query(pragma_query, conn)
+    print(f'Colunas da tabela {chosen_table}')
+    print(colunas_df.to_string(index=False))
+
+    # 4. Saber o nº de linhas da tabela
+    contar_linhas_query = f'Select count(*) as "total_linhas" from "{chosen_table}"'
+    contar_linhas_df = pd.read_sql_query(contar_linhas_query, conn)
+    total_linhas = int(contar_linhas_df['total_linhas'].iloc[0])
+    print(f'A tabela {chosen_table} tem {total_linhas} linhas')
