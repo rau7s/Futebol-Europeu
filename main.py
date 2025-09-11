@@ -77,3 +77,10 @@ with sqlite3.connect(INPUT_DB) as conn: # conn é a conexão com o banco, vamos 
     time_df = pd.read_sql_query(time_query, conn)
     print(f'Vamos ver se conseguimos achar o {time} no meio da tabela {chosen_table}')
     print(time_df.to_string(index=False))
+
+    # 6. Deixar dinamico o jeito de pegar o id de um time
+    def pegar_id_time(conn, table_name, team_name):
+        query = f"""
+        SELECT team_api_id, team_long_name
+
+        """
