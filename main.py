@@ -82,5 +82,22 @@ with sqlite3.connect(INPUT_DB) as conn: # conn é a conexão com o banco, vamos 
     def pegar_id_time(conn, table_name, team_name):
         query = f"""
         SELECT team_api_id, team_long_name
-
+        FROM {table_name}
+        where team_long_name LIKE ?
+        LIMIT 1;
         """
+
+        df = pd.read_sql_query(query, conn, params=(f"%{team_name}%",))
+
+        if df.empty:
+            print(f"Não localizamos o {team_name} na tabela {table_name}.")
+            return None
+        
+        team_id = int(df["team_api_id"].iloc[0])
+        print(f"ID do time {df['team_long_name'].iloc[0]}: {team_id}")
+        return team_id
+    
+    # para buscar o id do time com o nome dele:
+    id_bacelona = pegar_id_time(conn, chosen_table, "Barcelona")
+    id_arsenal = pegar_id_time(conn, chosen_table, "Arsenal")
+    id_liverpool = pegar_id_time(conn, chosen_table, "Liverpool")
